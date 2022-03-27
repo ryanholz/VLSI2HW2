@@ -3,23 +3,26 @@ module cache_fsm (clk, rst, rd_hit, rd_miss, wr_hit, wr_miss,
                 wr_back, invalid_other rd_en_1, wr_en_1, rd_en_2, wr_en_2, rd_en_3, wr_en_3, l2_rd_en, l2_wr_en);
     input clk;
     input rst;
+//need to add miss and hit signals for all L1 caches, this is just for one
     input rd_hit;
     input rd_miss;
     input wr_hit;
     input wr_miss;
-    input written_back;
-    input modified_data;
-    input shared_data;
-    input exclusive_data;
-    input invalid_done;
-    input L1_write_done;
 
-    input snoop_hit_rd;
-    input snoop_hit_wr;
+    input written_back;  // in case of snoop hit, after data is written to the L1 cache that is requesting data
+    input modified_data; // status flag for modified data
+    input shared_data;   // status flag for shared data
+    input exclusive_data; // status flag for exclusive data
+    input invalid_done;   // signal from datapath after other L1 caches have been updated with invalid status
+    input L1_write_done;  // (not initialized yet) flag for data written in the L1 cache
 
-    output reg wr_back;
-    output reg invalid_other;
+    input snoop_hit_rd; // read hit for data present in other L1 caches
+    input snoop_hit_wr; // write hit for data present in other L1 caches
+
+    output reg wr_back; // (not initialized yet) signal the L2 to write the modified data back to its L2 address
+    output reg invalid_other; //to invalidate the data of the other L1 caches
     
+    // read/write enables for L1 and L2 caches
     output reg rd_en_1;
     output reg wr_en_1;
 
@@ -39,8 +42,8 @@ parameter Invalid = 3'b000,
           Modified = 3'b010,
           Shared = 3'b011;
           Write_back = 3'b100; // write modified data back to L2 cache
-          L1_write = 3'b101;
-          invalid_check = 3'b110;
+          L1_write = 3'b101;   // write data in L1
+          invalid_check = 3'b110; // check if other caches have invalidated  data
 
 //sequential
 always @(posedge clk or posedge rst) begin
