@@ -285,8 +285,6 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     	theweD [0] = 0;		//Bus write enable for data
     	theweS [0] = 0;		//Bus write enable for status
     	there [0] = 0;
-       //	thewe [1]= 0;
-    	//there [1] = 0;
     	theAddr = 3'bzzz;
     	theData = 8'bzzzzzzzz;
     	theCore = 0;
@@ -298,35 +296,24 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     
     always @ (posedge clk) begin
     	if (state == 0) begin
-    	//$display("Waiting state");
     		//Write Miss
     		if (WM0 == 1) begin
-      			//$display("Outputting addr and re to L11");
     			theAddr = a0In;
-    			//$display("theAddr: %b", theAddr);
     			theCore = 0;
     		end 
     		if (WM1 == 1) begin
-      			//$display("Outputting addr and re to L100000000000");
     			theAddr = a1In;
-    			//$display("theAddr: %b", theAddr);
     			theCore = 1;
     		end 
     		if (WM2 == 1) begin
-      			//$display("Outputting addr and re to L11");
     			theAddr = a2In;
-    			//$display("theAddr: %b", theAddr);
     			theCore = 2;
     		end 
     		if (WM3 == 1) begin
-      			//$display("Outputting addr and re to L10");
     			theAddr = a3In;
-    			//$display("theAddr: %b", theAddr);
     			theCore = 3;
     		end
     		if (WM0 == 1 || WM1 == 1 || WM2 == 1 || WM3 == 1) begin 
-    			//$display("I SENSE A WRITE MISS");
-    			//$display("The core is %b", theCore);
     			state = 1;
     		   	for (i=0; i<4; i=i+1) begin 
     				theaOut [i] = theAddr;
@@ -340,37 +327,26 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     			there[1] = 1;
     			there[2] = 1;
     			there[3] = 1;
-    			//$display("The real address is: %b", theAddr); 
     		end 
     		
     		//Write Hit
     		if (WH0 == 1) begin
-      			//$display("Outputting addr and re to L11");
     			theAddr = a0In;
-    		   //	$display("theAddr: %b", theAddr);
     			theCore = 0;
     		end 
     		if (WH1 == 1) begin
-      			//$display("Outputting addr and re to L10");
     			theAddr = a1In;
-    			//$display("theAddr: %b", theAddr);
     			theCore = 1;
     		end 
     		if (WH2 == 1) begin
-      			//$display("Outputting addr and re to L11");
     			theAddr = a2In;
-    			//$display("theAddr: %b", theAddr);
     			theCore = 2;
     		end 
     		if (WH3 == 1) begin
-      			//$display("Outputting addr and re to L10");
     			theAddr = a3In;
-    			//$display("theAddr: %b", theAddr);
     			theCore = 3;
     		end
     		if (WH0 == 1 || WH1 == 1 || WH2 == 1 || WH3 == 1) begin
-    			//$display("I SENSE A WRITE HIT");
-    			//$display("The core is %b", theCore);
     			state = 11;
     			theaOut[0] = theAddr;
     			theaOut[1] = theAddr;
@@ -380,48 +356,26 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     			there[1] = 1;
     			there[2] = 1;
     			there[3] = 1;
-    			//if (WH0) theData = d0In;
-    			//if (WH1) theData = d1In;
-    			//if (WH2) theData = d2In;
-    			//if (WH3) theData = d3In;
-    			/*for (i=0; i<4; i=i+1)
-    			begin
-    				if (i != theCore)
-    				begin
-    					there[i] = 1;
-    				end 
-    			end         */
     		end 
     		
     		//Read Miss
     		if (RM0 == 1) begin
-      			//$display("Outputting addr and re to L101");
     			theAddr = a0In;
-    			//$display("theAddr: %b", theAddr);
     			theCore = 0;
     		end 
     		if (RM1 == 1) begin
-      			//$display("Outputting addr and re to L11");
     			theAddr = a1In;
-    		   //	$display("the ADDRESS: %b", theAddr);
-    		   //	$display("theAddr: %b", theAddr);
     			theCore = 1;
     		end 
     		if (RM2 == 1) begin
-      			//$display("Outputting addr and re to L12");
     			theAddr = a2In;
-    			//$display("theAddr: %b", theAddr);
     			theCore = 2;
     		end 
     		if (RM3 == 1) begin
-      			//$display("Outputting addr and re to L13");
     			theAddr = a3In;
-    			//$display("theAddr: %b", theAddr);
     			theCore = 3;
     		end
     		if (RM0 == 1 || RM1 == 1 || RM2 == 1 || RM3 == 1) begin 
-    			//$display("I SENSE A READ MISS");
-    			//$display("The core is %b", theCore);
     			state = 21;
     			theaOut[0] = theAddr;
     			theaOut[1] = theAddr;
@@ -435,33 +389,22 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     		
     		//Read Hit
     		if (RH0 == 1) begin
-      			//$display("Outputting addr and re to L10000000");
     			theAddr = a0In;
-    			//$display("theAddr: %b", theAddr);
     			theCore = 0;
     		end 
     		if (RH1 == 1) begin
-      			//$display("Outputting addr and re to L11111111");
     			theAddr = a1In;
-    			//$display("the ADDRESS: %b", theAddr);
-    		   //	$display("theAddr: %b", theAddr);
     			theCore = 1;
     		end 
     		if (RH2 == 1) begin
-      			//$display("Outputting addr and re to L12222222222");
     			theAddr = a2In;
-    			//$display("theAddr: %b", theAddr);
     			theCore = 2;
     		end 
     		if (RH3 == 1) begin
-      			//$display("Outputting addr and re to L1333333333");
     			theAddr = a3In;
-    			//$display("theAddr: %b", theAddr);
     			theCore = 3;
     		end
     		if (RH0 == 1 || RH1 == 1 || RH2 == 1 || RH3 == 1) begin 
-    			//$display("I SENSE A READ HIT");
-    			//$display("The core is %b", theCore);
     			state = 31;
     			theaOut[0] = theAddr;
     			theaOut[1] = theAddr;
@@ -474,7 +417,6 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     		end
     	end 
     	else if (state == 1) begin
-    		//$display("Waiting for response");
     		state = 2;
     	end 
     	else if (state == 2) begin
@@ -482,7 +424,6 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     		theSIn[1] = s1In;
     		theSIn[2] = s2In;
     		theSIn[3] = s3In;  
-    		//$display("In state 2");
     		
     		case (theCore)
     		0: theData = d0In;
@@ -490,44 +431,23 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     		2: theData = d2In;
     		3: theData = d3In;
     		endcase
-    		thedOut[theCore] = theData;
-    		//$display("The data: %b", thedOut[theCore]);
-    		
+    		thedOut[theCore] = theData;    		
     		
     		theweS [theCore] = 1;
     		theweD [theCore] = 1;
-    		//$display("S0In is %b", s0In);
-    		//$display("S1In is %b", s1In);
-    		//$display("S2In is %b", s2In);
-    		//$display("S3In is %b", s3In);
     		thesOut [theCore] = 2'b00;
     		for (i=0; i<4; i=i+1) begin
     			if (i != theCore) begin
-    	   			if (theSIn[i] == 2'b11) begin
-    		   			//$display("L11 didn't have addr. So L10 is Modified");
-    		   			//thewe[i] = 1;
-    	  			end
-    	  			if (theSIn[i] == 2'b00) begin 
-    					//$display("L11 did have addr. So L10 is Shared");
-    	   				thesOut [theCore] = 2'b01;
+    	   			if (theSIn[i] == 2'b00 || theSIn[i] == 2'b01 || theSIn[i] == 2'b10) begin
+    		   			thesOut [theCore] = 2'b01;
     	   				thesOut [i] = 2'b11;
     	   				theweS[i] = 1;
     	   				theweD[i] = 0;
     	   				theWEL2 = 1;
-    	 			end 
-    	 			if (theSIn[i] == 2'b01) begin 
-    					//$display("L11 did have addr. So L10 is Shared");
-    	   				thesOut [theCore] = 2'b01;
-    	   				thesOut [i] = 2'b11;
-    	   				theweS[i] = 1;
-    	   				theweD[i] = 0;
-    	   				//theWEL2 = 1;
-    	 			end 
+    	  			end
     	 		end 
     	 	end    
     		theaOut [theCore] = theAddr;
-    		//$display("theAddr: %b", theAddr);
-    		//$display("S0Out: %b   S1Out: %b   S2Out: %b   S3Out: %b", thesOut[0], thesOut[1], thesOut[2], thesOut[3]);
     		for (i=0; i<4; i=i+1) begin
     			if (i != theCore) begin
     				there [i] = 0;
@@ -536,7 +456,6 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     		state = 3;
     	end 
     	else if (state == 3) begin  
-	    	//$display("In state 3");
     		theweS[0] = 0;
     		theweS[1] = 0;
     		theweS[2] = 0;
@@ -550,7 +469,6 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     		state = 0;
     	end
     	else if (state == 11) begin
-    		//$display("Waiting for response");
     		state = 12;
     	end 
     	else if (state == 12) begin
@@ -558,33 +476,13 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     		theSIn[1] = s1In;
     		theSIn[2] = s2In;
     		theSIn[3] = s3In;
-    		//$display("S0In is %b", s0In);
-    		//$display("S1In is %b", s1In);
-    		//$display("S2In is %b", s2In);
-    		//$display("S3In is %b", s3In);
     		state = 0;
-    		theweS[theCore] = 1;
-    		//theweD[theCore] = 1;
-    		//thedOut[theCore] = theData;
-    	/*	if (WH0 == 1) begin	
-	    	thedOut[theCore] = d0In;
-	    	$display("ITS WH0 with d0In %b", d0In); end 
-    		if (WH1 == 1) begin	
-	    	thedOut[theCore] = d1In;
-	    	$display("ITS WH1 with d0In %b", d0In); end 
-	    	if (WH2 == 1) begin	
-	    	thedOut[theCore] = d2In;
-	    	$display("ITS WH2 with d0In %b", d0In); end 
-	    	if (WH3 == 1) begin	
-	    	thedOut[theCore] = d3In;
-	    	$display("ITS WH3 with d0In %b", d0In); end           */
-    		
+    		theweS[theCore] = 1;            		
     		 
     		if (theSIn[theCore] == 2'b00) begin
     			thesOut[theCore] = 2'b00;
     		end
     		else if (theSIn[theCore] == 2'b01) begin
-    			//$display("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrWrite hit on exclusive value");
     			thesOut[theCore] = 2'b00;
     		end
     		else if (theSIn[theCore] == 2'b10) begin
@@ -602,7 +500,6 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     						2: theData = d2In;
     						3: theData = d3In;
     					endcase
-    					//$display("theWEL2 = 1. theData = %b", theData);
     		end 
     		else if (theSIn[theCore] == 2'b11) begin
     			thesOut[theCore] = 2'b01;
@@ -628,7 +525,6 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     		state = 0;		
     	end 
     	else if (state == 21) begin
-    		//$display("Waiting for response");
     		state = 22;
     	end 
     	else if (state == 22) begin
@@ -636,20 +532,8 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     		theSIn[1] = s1In;
     		theSIn[2] = s2In;
     		theSIn[3] = s3In;  
-    		//$display("In state 22");
-    		//$display("S0In is %b", s0In);
-    		//$display("S1In is %b", s1In);
-    		//$display("S2In is %b", s2In);
-    		//$display("S3In is %b", s3In);
     		
-    	  /*	case (theCore)
-    		0: theData = d0In;
-    		1: theData = d1In;
-    		2: theData = d2In;
-    		3: theData = d3In;
-    		endcase             */
     		if (theSIn[0] == 2'b11 && theSIn[1] == 2'b11 && theSIn[2] == 2'b11 && theSIn[3] == 2'b11) begin
-    			//$display("theREL2 = 1");
     			theREL2 = 1;
     			state = 23;
  			end 
@@ -663,15 +547,13 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     						2: thedOut[theCore] = d2In;
     						3: thedOut[theCore] = d3In;
     					endcase 
-    					//$display("aaaaaaaaaaaaaaaaaaaaa heres data: %b", thedOut[theCore]);
     					theweS[i] = 1;
     					theweS[theCore] = 1;
     					thesOut[theCore] = 2'b10;
     					theweD[theCore] = 1;  
     					thesOut [i] = 2'b10;
-    					//$display("Found THE exclusive case");
     				end
-    				if (theSIn[i] == 2'b10) begin
+    				if (theSIn[i] == 2'b00 || theSIn[i] == 2'b01 || theSIn[i] == 2'b10) begin
     					case (i)
     						0: thedOut[theCore] = d0In;
     						1: thedOut[theCore] = d1In;
@@ -683,40 +565,8 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     					thesOut[theCore] = 2'b10;
     					theweD[theCore] = 1;  
     					thesOut [i] = 2'b10;
-    					//$display("Found shared case");
+    					theWEL2 = 1;
     				end 	
-    				if (theSIn[i] == 2'b00) begin
-    					case (i)
-    						0: theData = d0In;
-    						1: theData = d1In;
-    						2: theData = d2In;
-    						3: theData = d3In;
-    					endcase
-    					thedOut[theCore] = theData; 
-    					theweS[i] = 1;
-    					theweS[theCore] = 1;
-    					thesOut[theCore] = 2'b10;
-    					theweD[theCore] = 1;  
-    					thesOut [i] = 2'b10;
-    					theWEL2 = 1;
-    					//$display("Found modified case");
-    				end
-    				if (theSIn[i] == 2'b00) begin
-    					case (theCore)
-    						0: theData = d0In;
-    						1: theData = d1In;
-    						2: theData = d2In;
-    						3: theData = d3In;
-    					endcase
-    					thedOut[theCore] = theData; 
-    					theweS[i] = 1;
-    					theweS[theCore] = 1;
-    					thesOut[theCore] = 2'b11;
-    					theweD[theCore] = 1;  
-    					thesOut [i] = 2'b01;
-    					theWEL2 = 1;
-    					//$display("Found shared case");
-    				end
     			end 
     		 end 
     	end
@@ -745,7 +595,6 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     		state = 0;
     	end 
     	else if (state == 31) begin
-    		//$display("Waiting for response");
     		state = 32;
     	end 
     	else if (state == 32) begin
@@ -753,58 +602,27 @@ module theBus (clk, weD0, weS0, re0, d0In, a0In, s0In, d0Out, a0Out, s0Out, WH0,
     		theSIn[1] = s1In;
     		theSIn[2] = s2In;
     		theSIn[3] = s3In;  
-    		//$display("In state 32");
     		
-    		if (theSIn[theCore] == 2'b00) begin	
+    		if (theSIn[theCore] == 2'b11) begin	
     			for (i=0; i<4; i=i+1) begin
    			 		if (i != theCore) begin
-   		 				if (theSIn[i] == 2'b00 || theSIn[i] == 2'b10) begin
+   		 				if (theSIn[i] == 2'b00 || theSIn[i] == 2'b01 || theSIn[i] == 2'b10) begin
     						case (i)
-    							0: thedOut[theCore] = d0In;
-    							1: thedOut[theCore] = d1In;
-    							2: thedOut[theCore] = d2In;
-    							3: thedOut[theCore] = d3In;
-    						endcase                        
-    						theweS[i] = 1;
-    						theweD[i] = 1;
-    						//$display("Found modified/shared case");
+    							0: theData = d0In;
+    							1: theData = d1In;
+    							2: theData = d2In;
+    							3: theData = d3In; 
+    						endcase
+    						thesOut[i] = 2'b10;
+    		   				theweS[i] = 1;
     					end
     				end 
     			end 
-    			for (i=0; i<4; i=i+1) begin
-    				if (theSIn[i] == 2'b01) begin
-    					case (i)
-    						0: thedOut[theCore] = d0In;
-    						1: thedOut[theCore] = d1In;
-    						2: thedOut[theCore] = d2In;
-    						3: thedOut[theCore] = d3In;
-    					endcase                        
-    					theweS[i] = 1;
-    					theweD[i] = 1;
-    					//$display("Found exclusive case");
-    				end
-    			end 
-    		end
-    		
-    		if (theSIn[theCore] == 2'b00) begin
-    			thesOut[theCore] = 2'b00;
-    		end
-    		else if (theSIn[theCore] == 2'b01) begin
-    			thesOut[theCore] = 2'b01;
-    		end
-    		else if (theSIn[theCore] == 2'b10) begin
-    			thesOut[theCore] = 2'b10;
-    		end 
-    		theweS[theCore] = 1;
-    		theweD[theCore] = 1;
-    		//$display("The data: %b", thedOut[theCore]);
-    		//$display("S0In is %b", s0In);
-    		//$display("S1In is %b", s1In);
-    		//$display("S2In is %b", s2In);
-    		//$display("S3In is %b", s3In);
-    		//thesOut [theCore] = 2'b10;
-    		//$display("thesOut[theCore] = 2'b01");
-    		
+    			thedOut[theCore] = theData;
+    			theweS[theCore] = 1;
+    			theweD[theCore] = 1;
+    			thesOut[theCore] = 2'b10; 
+    		end    		
     		state = 33;
     	end
     	else if (state == 33) begin
@@ -919,16 +737,6 @@ module cache_tb;
 		$display("L1 3  d0: %b  d1: %b  d2:  %b  d3:  %b", d3[0], d3[1], d3[2], d3[3]);
 		$display("L1 3  a0: %b       a1: %b       a2:  %b       a3:  %b", a3[0], a3[1], a3[2], a3[3]);
 		$display("L1 3  s0: %b        s1: %b        s2:  %b        s3:  %b", s3[0], s3[1], s3[2], s3[3]);
-		/*for (i=0; i<8; i=i+1)
-		begin
-			$display("L2 %b Data: %b", i, L2data[i]);
-		end 
-		for (j=0; j<4; j=j+1)
-		begin
-			$display("L1 cache %b", j);
-			$display("WH: %b  , WM: %b  , RH: %b  , RM: %b", WH[j], WM[j], RH[j], RM[j]);
-			$display("Bus Lines  -  Data: %b   Addr: %b  Status: %b", dOutBus[j], addrOutBus[j], statusOut[j]);
-		end      */
 		
 		//WM on Invalid
 		core = 2;  
@@ -1233,6 +1041,117 @@ module cache_tb;
 		#CYCLE;
 		$display("Write %b to addr %b on core %b", dInCPU[core], addrInCPU[core], core);
 		$display("WM other copies Shared");
+		$display("L1 0  d0: %b  d1: %b  d2:  %b  d3:  %b", d0[0], d0[1], d0[2], d0[3]);
+		$display("L1 0  a0: %b       a1: %b       a2:  %b       a3:  %b", a0[0], a0[1], a0[2], a0[3]);
+		$display("L1 0  s0: %b        s1: %b        s2:  %b        s3:  %b", s0[0], s0[1], s0[2], s0[3]);
+		$display("L1 1  d0: %b  d1: %b  d2:  %b  d3:  %b", d1[0], d1[1], d1[2], d1[3]);
+		$display("L1 1  a0: %b       a1: %b       a2:  %b       a3:  %b", a1[0], a1[1], a1[2], a1[3]);
+		$display("L1 1  s0: %b        s1: %b        s2:  %b        s3:  %b", s1[0], s1[1], s1[2], s1[3]);
+		$display("L1 2  d0: %b  d1: %b  d2:  %b  d3:  %b", d2[0], d2[1], d2[2], d2[3]);
+		$display("L1 2  a0: %b       a1: %b       a2:  %b       a3:  %b", a2[0], a2[1], a2[2], a2[3]);
+		$display("L1 2  s0: %b        s1: %b        s2:  %b        s3:  %b", s2[0], s2[1], s2[2], s2[3]);
+		$display("L1 3  d0: %b  d1: %b  d2:  %b  d3:  %b", d3[0], d3[1], d3[2], d3[3]);
+		$display("L1 3  a0: %b       a1: %b       a2:  %b       a3:  %b", a3[0], a3[1], a3[2], a3[3]);
+		$display("L1 3  s0: %b        s1: %b        s2:  %b        s3:  %b", s3[0], s3[1], s3[2], s3[3]);
+		for (i=0; i<8; i=i+1) begin
+			$display("L2 %b Data: %b", i, L2data[i]);
+		end
+		
+		//RH on Invalid
+		core = 0;
+		CPUre[core] = 1;
+		addrInCPU[core] = 3'b101;
+		#CYCLE;
+		#CYCLE;
+		#CYCLE;
+		#CYCLE;
+		CPUre[core] = 0;
+	   	#CYCLE;    
+	   	$display("Read addr %b from core %b", addrInCPU[core], core);
+	   	$display("RH on Invalid");
+		$display("L1 0  d0: %b  d1: %b  d2:  %b  d3:  %b", d0[0], d0[1], d0[2], d0[3]);
+		$display("L1 0  a0: %b       a1: %b       a2:  %b       a3:  %b", a0[0], a0[1], a0[2], a0[3]);
+		$display("L1 0  s0: %b        s1: %b        s2:  %b        s3:  %b", s0[0], s0[1], s0[2], s0[3]);
+		$display("L1 1  d0: %b  d1: %b  d2:  %b  d3:  %b", d1[0], d1[1], d1[2], d1[3]);
+		$display("L1 1  a0: %b       a1: %b       a2:  %b       a3:  %b", a1[0], a1[1], a1[2], a1[3]);
+		$display("L1 1  s0: %b        s1: %b        s2:  %b        s3:  %b", s1[0], s1[1], s1[2], s1[3]);
+		$display("L1 2  d0: %b  d1: %b  d2:  %b  d3:  %b", d2[0], d2[1], d2[2], d2[3]);
+		$display("L1 2  a0: %b       a1: %b       a2:  %b       a3:  %b", a2[0], a2[1], a2[2], a2[3]);
+		$display("L1 2  s0: %b        s1: %b        s2:  %b        s3:  %b", s2[0], s2[1], s2[2], s2[3]);
+		$display("L1 3  d0: %b  d1: %b  d2:  %b  d3:  %b", d3[0], d3[1], d3[2], d3[3]);
+		$display("L1 3  a0: %b       a1: %b       a2:  %b       a3:  %b", a3[0], a3[1], a3[2], a3[3]);
+		$display("L1 3  s0: %b        s1: %b        s2:  %b        s3:  %b", s3[0], s3[1], s3[2], s3[3]);
+		for (i=0; i<8; i=i+1) begin
+			$display("L2 %b Data: %b", i, L2data[i]);
+		end 
+		
+		//RH on Shared
+		core = 1;
+		CPUre[core] = 1;
+		addrInCPU[core] = 3'b101;
+		#CYCLE;
+		#CYCLE;
+		#CYCLE;
+		#CYCLE;
+		CPUre[core] = 0;
+	   	#CYCLE;    
+	   	$display("Read addr %b from core %b", addrInCPU[core], core);
+	   	$display("RH on Shared");
+		$display("L1 0  d0: %b  d1: %b  d2:  %b  d3:  %b", d0[0], d0[1], d0[2], d0[3]);
+		$display("L1 0  a0: %b       a1: %b       a2:  %b       a3:  %b", a0[0], a0[1], a0[2], a0[3]);
+		$display("L1 0  s0: %b        s1: %b        s2:  %b        s3:  %b", s0[0], s0[1], s0[2], s0[3]);
+		$display("L1 1  d0: %b  d1: %b  d2:  %b  d3:  %b", d1[0], d1[1], d1[2], d1[3]);
+		$display("L1 1  a0: %b       a1: %b       a2:  %b       a3:  %b", a1[0], a1[1], a1[2], a1[3]);
+		$display("L1 1  s0: %b        s1: %b        s2:  %b        s3:  %b", s1[0], s1[1], s1[2], s1[3]);
+		$display("L1 2  d0: %b  d1: %b  d2:  %b  d3:  %b", d2[0], d2[1], d2[2], d2[3]);
+		$display("L1 2  a0: %b       a1: %b       a2:  %b       a3:  %b", a2[0], a2[1], a2[2], a2[3]);
+		$display("L1 2  s0: %b        s1: %b        s2:  %b        s3:  %b", s2[0], s2[1], s2[2], s2[3]);
+		$display("L1 3  d0: %b  d1: %b  d2:  %b  d3:  %b", d3[0], d3[1], d3[2], d3[3]);
+		$display("L1 3  a0: %b       a1: %b       a2:  %b       a3:  %b", a3[0], a3[1], a3[2], a3[3]);
+		$display("L1 3  s0: %b        s1: %b        s2:  %b        s3:  %b", s3[0], s3[1], s3[2], s3[3]);
+		for (i=0; i<8; i=i+1) begin
+			$display("L2 %b Data: %b", i, L2data[i]);
+		end
+		
+		//RH on Exclusive
+		core = 1;
+		CPUre[core] = 1;
+		addrInCPU[core] = 3'b001;
+		#CYCLE;
+		#CYCLE;
+		#CYCLE;
+		#CYCLE;
+		CPUre[core] = 0;
+	   	#CYCLE;    
+	   	$display("Read addr %b from core %b", addrInCPU[core], core);
+	   	$display("RH on Exclusive");
+		$display("L1 0  d0: %b  d1: %b  d2:  %b  d3:  %b", d0[0], d0[1], d0[2], d0[3]);
+		$display("L1 0  a0: %b       a1: %b       a2:  %b       a3:  %b", a0[0], a0[1], a0[2], a0[3]);
+		$display("L1 0  s0: %b        s1: %b        s2:  %b        s3:  %b", s0[0], s0[1], s0[2], s0[3]);
+		$display("L1 1  d0: %b  d1: %b  d2:  %b  d3:  %b", d1[0], d1[1], d1[2], d1[3]);
+		$display("L1 1  a0: %b       a1: %b       a2:  %b       a3:  %b", a1[0], a1[1], a1[2], a1[3]);
+		$display("L1 1  s0: %b        s1: %b        s2:  %b        s3:  %b", s1[0], s1[1], s1[2], s1[3]);
+		$display("L1 2  d0: %b  d1: %b  d2:  %b  d3:  %b", d2[0], d2[1], d2[2], d2[3]);
+		$display("L1 2  a0: %b       a1: %b       a2:  %b       a3:  %b", a2[0], a2[1], a2[2], a2[3]);
+		$display("L1 2  s0: %b        s1: %b        s2:  %b        s3:  %b", s2[0], s2[1], s2[2], s2[3]);
+		$display("L1 3  d0: %b  d1: %b  d2:  %b  d3:  %b", d3[0], d3[1], d3[2], d3[3]);
+		$display("L1 3  a0: %b       a1: %b       a2:  %b       a3:  %b", a3[0], a3[1], a3[2], a3[3]);
+		$display("L1 3  s0: %b        s1: %b        s2:  %b        s3:  %b", s3[0], s3[1], s3[2], s3[3]);
+		for (i=0; i<8; i=i+1) begin
+			$display("L2 %b Data: %b", i, L2data[i]);
+		end
+		
+		core = 1;
+		CPUre[core] = 1;
+		addrInCPU[core] = 3'b001;
+		#CYCLE;
+		#CYCLE;
+		#CYCLE;
+		#CYCLE;
+		CPUre[core] = 0;
+	   	#CYCLE;    
+	   	$display("Read addr %b from core %b", addrInCPU[core], core);
+	   	$display("RH on Exclusive");
 		$display("L1 0  d0: %b  d1: %b  d2:  %b  d3:  %b", d0[0], d0[1], d0[2], d0[3]);
 		$display("L1 0  a0: %b       a1: %b       a2:  %b       a3:  %b", a0[0], a0[1], a0[2], a0[3]);
 		$display("L1 0  s0: %b        s1: %b        s2:  %b        s3:  %b", s0[0], s0[1], s0[2], s0[3]);
