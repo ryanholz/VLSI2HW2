@@ -901,6 +901,9 @@ module cache_tb;
 	L2cache testCache4 (.clk(clk), .we(weL2), .re(reL2), .d(dataInL2), .addr(addrInL2), .q(dataOutL2), .q0(L2data[0]), .q1(L2data[1]), .q2(L2data[2]), .q3(L2data[3]), .q4(L2data[4]), .q5(L2data[5]), .q6(L2data[6]), .q7(L2data[7]));
 	
 	initial begin 
+		// Dumpfile used for waveform 
+		$dumpfile("hw2.vcd");
+
 		//Print initial state of cache 
 		$display("Initial");
 		$display("L1 0  d0: %b  d1: %b  d2:  %b  d3:  %b", d0[0], d0[1], d0[2], d0[3]);
