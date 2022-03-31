@@ -903,6 +903,7 @@ module cache_tb;
 	initial begin 
 		// Dumpfile used for waveform 
 		$dumpfile("hw2.vcd");
+		$dumpvars();
 
 		//Print initial state of cache 
 		$display("Initial");
