@@ -1,28 +1,31 @@
 module L1cache (clk, CPUwe, CPUre, BUSweD, BUSweS, BUSre, dInCPU, dInBus, addrInCPU, dOutBus, dOutCPU, addrInBus, addrOutBus, statusIn, statusOut, WH, WM, RH, RM, d0, a0, s0, d1, a1, s1, d2, a2, s2, d3, a3, s3);
+	/* including the parameters header file */
+	include "parameters.vh";
+
 	input clk, CPUwe, CPUre, BUSweD, BUSweS, BUSre;				//Clock and write enable
-	input [7:0] dInCPU;         	//Data In from CPU
-	input [2:0] addrInCPU;			//Address In from CPU
-	output [7:0] dOutBus;          //Data In/Out to bus
-	output [7:0] dOutCPU;
-	input [2:0] addrInBus;
-	output [2:0] addrOutBus;       //Address In/Out to bus
-	input [1:0] statusIn;
-	output [1:0] statusOut;     //Status Out to bus
+	input [DATA_WIDTH-1:0] dInCPU;         	//Data In from CPU
+	input [L2_ADDR_WIDTH-1:0] addrInCPU;			//Address In from CPU
+	output [DATA_WIDTH-1:0] dOutBus;          //Data In/Out to bus
+	output [DATA_WIDTH-1:0] dOutCPU;
+	input [L2_ADDR_WIDTH-1:0] addrInBus;
+	output [L2_ADDR_WIDTH-1:0] addrOutBus;       //Address In/Out to bus
+	input [MESI_WIDTH-1:0] statusIn;
+	output [MESI_WIDTH-1:0] statusOut;     //Status Out to bus
 	output WH;
 	output WM;
 	output RH;
 	output RM;
-	output [7:0] d0, d1, d2, d3;
-	output [2:0] a0, a1, a2, a3;
-	output [1:0] s0, s1, s2, s3;
-	input [7:0] dInBus;     
+	output [DATA_WIDTH-1:0] d0, d1, d2, d3;
+	output [L2_ADDR_WIDTH-1:0] a0, a1, a2, a3;
+	output [MESI_WIDTH-1:0] s0, s1, s2, s3;
+	input [DATA_WIDTH-1:0] dInBus;     
 	
 	integer i, WHout, WMout, RHout, RMout;
 	
-	reg [7:0] data [3:0];		//Data register
-	reg [2:0] addr [3:0];		//Address register
-	reg [1:0] theStatus [3:0];	//Status register
-	reg [1:0] localAddr; 		//Address of L1 being accessed
+	reg [DATA_WIDTH-1:0] data [NUM_CORES-1:0];		//Data register
+	reg [L2_ADDR_WIDTH-1:0] addr [NUM_CORES-1:0];		//Address register
+	reg [MESI_WIDTH-1:0] theStatus [NUM_CORES-1:0];	//Status register
+	reg [L1_ADDR_WIDTH-1:0] localAddr; 		//Address of L1 being accessed
 	integer dataUpdated; 		//Boolean to determine if data has been updated 
 	integer outToCPU;
 	integer outToBus;
@@ -152,23 +155,26 @@ module L1cache (clk, CPUwe, CPUre, BUSweD, BUSweS, BUSre, dInCPU, dInBus, addrIn
 endmodule
 
 module L2cache (clk, we, re, d, addr, q, q0, q1, q2, q3, q4, q5, q6, q7);
+	/* Include parameters header file */
+	include "parameters.vh";
+
 	input clk, we, re;
-	input [7:0] d;
-	input [2:0] addr;
-	output [7:0] q;
-	output [7:0] q0;
-	output [7:0] q1;
-	output [7:0] q2;
-	output [7:0] q3;
-	output [7:0] q4;
-	output [7:0] q5;
-	output [7:0] q6;
-	output [7:0] q7;
+	input [DATA_WIDTH-1:0] d;
+	input [L2_ADDR_WIDTH-1:0] addr;
+	output [DATA_WIDTH-1:0] q;
+	output [DATA_WIDTH-1:0] q0;
+	output [DATA_WIDTH-1:0] q1;
+	output [DATA_WIDTH-1:0] q2;
+	output [DATA_WIDTH-1:0] q3;
+	output [DATA_WIDTH-1:0] q4;
+	output [DATA_WIDTH-1:0] q5;
+	output [DATA_WIDTH-1:0] q6;
+	output [DATA_WIDTH-1:0] q7;
 	
 	integer i;
 	integer theOutput;
 	
-	reg [7:0] data [7:0];
+	reg [DATA_WIDTH-1:0] data [NUM_L2_BLOCKS:0];
 	
 	initial begin 
 	 	for (i=0; i<8; i=i+1) begin			//Initialize data, addr, and status registers
